@@ -29,6 +29,7 @@
       background-color: var(--bg-color);
       color: var(--text-main);
       padding: 16px;
+      padding-bottom: 80px; /* Espacio para el menú inferior de la App */
       display: flex;
       justify-content: center;
       min-height: 100vh;
@@ -43,15 +44,32 @@
     }
 
     .header {
-      text-align: center;
-      font-size: 1.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+    }
+
+    .header-logo {
+      font-size: 1.3rem;
       font-weight: 700;
       color: #a5b4fc;
-      padding: 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-user {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: #6366f1;
+      color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      font-weight: bold;
+      font-size: 0.85rem;
     }
 
     .banner {
@@ -71,13 +89,23 @@
       box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
     }
 
+    /* Ajuste para que la foto no se corte */
+    .pet-photo-container {
+      width: 100%;
+      height: 280px;
+      background-color: #0d1117;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     .pet-photo {
       width: 100%;
-      height: 240px;
-      object-fit: cover;
-      border-radius: 12px;
-      margin-bottom: 16px;
-      background-color: #1e293b;
+      height: 100%;
+      object-fit: contain; /* Ajusta la foto entera sin recortar */
     }
 
     .pet-name {
@@ -150,7 +178,6 @@
       font-weight: 700;
       font-size: 0.95rem;
       margin-top: 10px;
-      transition: opacity 0.2s;
     }
 
     .btn-green {
@@ -179,13 +206,46 @@
       font-size: 0.95rem;
       line-height: 1.4;
     }
+
+    /* Barra de Navegación App Inferior */
+    .app-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #111827;
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      z-index: 100;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: var(--text-sub);
+      text-decoration: none;
+      font-size: 0.75rem;
+      gap: 4px;
+    }
+
+    .nav-item.active {
+      color: var(--btn-blue);
+    }
+
+    .nav-icon {
+      font-size: 1.2rem;
+    }
   </style>
 </head>
 <body>
 
   <div class="container">
     <div class="header">
-      🐾 PetSafe QR
+      <div class="header-logo">🐾 PetSafe QR</div>
+      <div class="header-user">S</div>
     </div>
 
     <div class="banner">
@@ -199,9 +259,28 @@
     </div>
   </div>
 
+  <!-- Comandos de la App -->
+  <nav class="app-nav">
+    <a href="#" class="nav-item active">
+      <span class="nav-icon">📲</span>
+      <span>Inicio</span>
+    </a>
+    <a href="#" class="nav-item">
+      <span class="nav-icon">🔍</span>
+      <span>Mascotas</span>
+    </a>
+    <a href="#" class="nav-item">
+      <span class="nav-icon">👤</span>
+      <span>Iniciar Sesión</span>
+    </a>
+    <a href="#" class="nav-item">
+      <span class="nav-icon">❓</span>
+      <span>Ayuda</span>
+    </a>
+  </nav>
+
   <script>
-    // URL de tu API de Google Apps Script actualizada
-    const API_URL = "https://script.google.com/macros/s/AKfycbwF4M2ex21jA5nxkN3NihYSWASm4GR9lHR_8pTYvjrtz1vP3g0bHH9Oist72OYRIt2Y/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbxxvZVQ547PYNuUyjjz3DBsjzaWaH8vy8PQEh59rLrkIVQx1YzWV-z1zSCuEOsKC6Q/exec";
 
     async function cargarMascota() {
       const contentEl = document.getElementById('content');
@@ -235,9 +314,13 @@
         }
 
         contentEl.innerHTML = `
-          ${data.foto ? `<img src="${data.foto}" class="pet-photo" alt="${data.nombre}">` : ''}
+          ${data.foto ? `
+            <div class="pet-photo-container">
+              <img src="${data.foto}" class="pet-photo" alt="${data.nombre}">
+            </div>
+          ` : ''}
           <div class="pet-name">${data.nombre}</div>
-          <div class="pet-badge">${data.especie}</div>
+          <div class="pet-badge">🐾 ${data.especie}</div>
 
           ${data.cuidados ? `
             <div class="alert-box">
@@ -260,7 +343,7 @@
 
           ${data.telefono ? `
             <a href="https://wa.me/${data.telefono.toString().replace(/[^0-9]/g, '')}" target="_blank" class="btn-action btn-green">
-              💬 Enviar mensaje a tutor/a
+              💬 Enviar mensaje seguro al tutor/a
             </a>
             <a href="tel:${data.telefono}" class="btn-action btn-blue">
               📞 Llamar al tutor/a (${data.telefono})
