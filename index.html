@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PetSafe QR - Identificación Segura</title>
+  <style>
+    :root {
+      --bg-dark: #12141d;
+      --card-bg: #1e2230;
+      --card-inner: #282c3f;
+      --primary-blue: #3b82f6;
+      --accent-purple: #8b5cf6;
+      --text-main: #ffffff;
+      --text-muted: #9ca3af;
+      --warning-bg: #3d2b1f;
+      --warning-border: #d97706;
+      --warning-text: #f59e0b;
+      --status-lost-bg: rgba(239, 68, 68, 0.2);
+      --status-lost-text: #ef4444;
+      --status-home-bg: rgba(34, 197, 94, 0.2);
+      --status-home-text: #22c55e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 480px;
+      background-color: var(--bg-dark);
+      padding-bottom: 80px;
+      position: relative;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      background-color: var(--bg-dark);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-img {
+      width: 32px;
+      height: 32px;
+    }
+
+    .logo-text {
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-blue), var(--accent-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    /* Banner informativo */
+    .info-banner {
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      margin: 16px;
+      padding: 16px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .info-banner-text {
+      font-size: 13px;
+      line-height: 1.4;
+      opacity: 0.95;
+    }
+
+    .main-content {
+      padding: 0 16px;
+    }
+
+    /* Card Mascota */
+    .pet-card {
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .pet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .pet-title {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .status-badge {
+      background-color: var(--status-lost-bg);
+      color: var(--status-lost-text);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .pet-subtitle {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    /* Imagen completa sin recortes */
+    .pet-image-container {
+      width: 100%;
+      max-height: 350px;
+      background-color: #0b0c10;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .pet-image {
+      width: 100%;
+      height: 100%;
+      max-height: 350px;
+      object-fit: contain;
+    }
+
+    /* Cuidados y Salud */
+    .health-box {
+      background-color: var(--warning-bg);
+      border: 1px solid var(--warning-border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+
+    .health-title {
+      color: var(--warning-text);
+      font-size: 14px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .health-desc {
+      color: #fef08a;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    /* Datos del Tutor */
+    .tutor-info {
+      background-color: var(--card-inner);
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      font-size: 13px;
+    }
+
+    .tutor-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .tutor-label {
+      color: var(--text-muted);
+    }
+
+    /* Botones de Contacto Ocultando Números */
+    .btn-action {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      text-decoration: none;
+      color: white;
+      transition: opacity 0.2s;
+    }
+
+    .btn-action:hover { opacity: 0.9; }
+    .btn-whatsapp { background-color: #25d366; }
+    .btn-call { background-color: #334155; }
+
+    /* Ubicación GPS */
+    .location-box {
+      background-color: var(--card-inner);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 16px;
+    }
+
+    .location-title {
+      font-size: 14px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .location-desc {
+      color: var(--text-muted);
+      font-size: 12px;
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+
+    .btn-location {
+      background-color: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .privacy-notice {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 11px;
+      margin-top: 16px;
+    }
+
+    /* === MÓDULO DE INICIAR SESIÓN / REGISTRO === */
+    .auth-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      z-index: 200;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .auth-card {
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      padding: 24px;
+      width: 100%;
+      max-width: 400px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+    }
+
+    .auth-close {
+      position: absolute;
+      top: 12px; right: 16px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .auth-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 6px;
+      text-align: center;
+    }
+
+    .auth-subtitle {
+      color: var(--text-muted);
+      font-size: 13px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .btn-google {
+      background-color: #ffffff;
+      color: #000000;
+      font-weight: 600;
+    }
+
+    .btn-email {
+      background-color: var(--primary-blue);
+      color: #ffffff;
+    }
+
+    .auth-divider {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 12px;
+      margin: 16px 0;
+      position: relative;
+    }
+
+    .auth-register-link {
+      display: block;
+      text-align: center;
+      color: var(--accent-purple);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      margin-top: 14px;
+    }
+
+    /* Navegación Inferior */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 480px;
+      background-color: #1a1d29;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0;
+      z-index: 100;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 11px;
+      gap: 4px;
+      width: 25%;
+      cursor: pointer;
+    }
+
+    .nav-item.active { color: var(--primary-blue); }
+    .nav-icon { font-size: 18px; }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+
+  <header class="header">
+    <div class="logo-container">
+      <svg class="logo-img" viewBox="0 0 100 100" fill="none">
+        <path d="M30 40 C20 40 15 55 25 65 C35 75 40 60 30 40 Z" fill="#3b82f6"/>
+        <path d="M70 40 C80 40 85 55 75 65 C65 75 60 60 70 40 Z" fill="#3b82f6"/>
+        <path d="M42 25 C35 25 32 38 40 43 C48 48 48 33 42 25 Z" fill="#8b5cf6"/>
+        <path d="M58 25 C65 25 68 38 60 43 C52 48 52 33 58 25 Z" fill="#8b5cf6"/>
+        <path d="M50 48 C35 48 25 65 35 85 C45 92 55 92 65 85 C75 65 65 48 50 48 Z" fill="url(#grad)"/>
+        <defs>
+          <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#3b82f6" />
+            <stop offset="100%" stop-color="#8b5cf6" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <span class="logo-text">PetSafe QR</span>
+    </div>
+    <div class="user-avatar" onclick="abrirModalAuth()">S</div>
+  </header>
+
+  <div class="info-banner">
+    <div class="info-banner-text">
+      Este perfil usa la información real del registro conectado. Confirma la mascota antes de contactar a su tutor o tutora.
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="pet-card">
+      <div class="pet-header">
+        <div class="pet-title" id="pet-name">Cargando...</div>
+        <div class="status-badge" id="pet-status">--</div>
+      </div>
+      
+      <div class="pet-subtitle" id="pet-breed">--</div>
+
+      <div class="pet-image-container">
+        <img id="pet-photo" src="" alt="Mascota" class="pet-image">
+      </div>
+
+      <div class="health-box">
+        <div class="health-title">⚠️ CUIDADOS Y SALUD</div>
+        <div class="health-desc" id="pet-notes">Cargando notas médicas...</div>
+      </div>
+
+      <div class="tutor-info">
+        <div class="tutor-row">
+          <span class="tutor-label">Tutor/a registrado:</span>
+          <strong id="tutor-name">--</strong>
+        </div>
+        <div class="tutor-row">
+          <span class="tutor-label">Canal preferido:</span>
+          <span style="color: #4ade80;">Llamada o Mensaje seguro</span>
+        </div>
+        <div class="tutor-row">
+          <span class="tutor-label">Apoyo de emergencia:</span>
+          <span id="emergency-contact">--</span>
+        </div>
+      </div>
+
+      <a id="btn-whatsapp" href="#" class="btn-action btn-whatsapp">
+        💬 Enviar mensaje seguro al tutor/a
+      </a>
+
+      <a id="btn-call" href="#" class="btn-action btn-call">
+        📞 Llamar al tutor/a
+      </a>
+
+      <div class="location-box">
+        <div class="location-title">📍 Activar ubicación de rescate</div>
+        <div class="location-desc">
+          Tu navegador solicitará permiso GPS para enviar las coordenadas al tutor.
+        </div>
+        <button class="btn-action btn-location" onclick="compartirUbicacion()">
+          📍 Compartir mi ubicación actual con el tutor/a
+        </button>
+      </div>
+
+      <div class="privacy-notice">
+        🛡️ Privacidad PetSafe QR protegida.
+      </div>
+    </div>
+  </div>
+
+  <!-- VENTANA EMERGENTE DE INICIAR SESIÓN Y REGISTRO -->
+  <div class="auth-modal" id="authModal">
+    <div class="auth-card">
+      <button class="auth-close" onclick="cerrarModalAuth()">✕</button>
+      <div class="auth-title">Iniciar Sesión</div>
+      <div class="auth-subtitle">Accede a la gestión de tus mascotas PetSafe QR</div>
+
+      <button class="btn-action btn-google" onclick="alert('Función de Google Login en integración.')">
+        🌐 Continuar con Google
+      </button>
+
+      <button class="btn-action btn-email" onclick="alert('Ingreso con correo seleccionado.')">
+        ✉️ Continuar con Correo
+      </button>
+
+      <div class="auth-divider">ó</div>
+
+      <a href="https://tally.so/r/68BMZN" target="_blank" class="auth-register-link">
+        ¿Aún no tienes cuenta? Regístrate aquí en Tally 📝
+      </a>
+    </div>
+  </div>
+
+  <!-- Navegación Inferior -->
+  <nav class="bottom-nav">
+    <a href="#" class="nav-item active">
+      <span class="nav-icon">📲</span>
+      <span>Inicio</span>
+    </a>
+    <a href="#" class="nav-item">
+      <span class="nav-icon">🔍</span>
+      <span>Mascotas</span>
+    </a>
+    <!-- Módulo Iniciar Sesión justo después de Buscar -->
+    <div class="nav-item" onclick="abrirModalAuth()">
+      <span class="nav-icon">👤</span>
+      <span>Iniciar Sesión</span>
+    </div>
+    <a href="#" class="nav-item">
+      <span class="nav-icon">❓</span>
+      <span>Ayuda</span>
+    </a>
+  </nav>
+
+</div>
+
+<script>
+  // URL de tu Google Apps Script
+  const GOOGLE_SHEETS_API_URL = "https://script.google.com/macros/s/AKfycbyZRhFfQEOJb8FiRNZld1YGkyyQV7qBfQgWGU5ptyXyrBRYIOgq41soKRBX8II6iOiv/exec";
+
+  function abrirModalAuth() {
+    document.getElementById('authModal').style.display = 'flex';
+  }
+
+  function cerrarModalAuth() {
+    document.getElementById('authModal').style.display = 'none';
+  }
+
+  function getPetIdFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('id') || 'PET001';
+  }
+
+  async function cargarDatosMascota() {
+    const petId = getPetIdFromURL();
+    
+    try {
+      const response = await fetch(`${GOOGLE_SHEETS_API_URL}?id=${petId}`);
+      const data = await response.json();
+
+      if (data && data.nombre) {
+        document.getElementById('pet-name').innerText = `${data.nombre}`;
+        document.getElementById('pet-breed').innerText = data.raza || '';
+        
+        if (data.foto) {
+          document.getElementById('pet-photo').src = data.foto;
+        }
+
+        const statusBadge = document.getElementById('pet-status');
+        if (data.estado && data.estado.toLowerCase().includes('perdid')) {
+          statusBadge.innerText = '⚠️ Perdido';
+          statusBadge.style.backgroundColor = 'var(--status-lost-bg)';
+          statusBadge.style.color = 'var(--status-lost-text)';
+        } else {
+          statusBadge.innerText = '🏠 En Casa';
+          statusBadge.style.backgroundColor = 'var(--status-home-bg)';
+          statusBadge.style.color = 'var(--status-home-text)';
+        }
+
+        document.getElementById('pet-notes').innerText = data.notas || data.cuidados || 'Sin novedades registradas.';
+        document.getElementById('tutor-name').innerText = data.tutor || 'Tutor Registrado';
+        document.getElementById('emergency-contact').innerText = data.contacto_emergencia || 'No asignado';
+
+        if (data.telefono) {
+          const numLimpio = data.telefono.toString().replace(/[^0-9]/g, '');
+          document.getElementById('btn-whatsapp').href = `https://wa.me/${numLimpio}?text=Hola,%20encontr%C3%A9%20a%20tu%20mascota%20${encodeURIComponent(data.nombre)}`;
+          document.getElementById('btn-call').href = `tel:${numLimpio}`;
+        }
+      }
+    } catch (error) {
+      console.error("Cargando modo vista previa o error de datos:", error);
+    }
+  }
+
+  function compartirUbicacion() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        alert("Ubicación enviada con éxito.");
+      }, function() {
+        alert("Por favor habilita el permiso de ubicación.");
+      });
+    }
+  }
+
+  window.onload = cargarDatosMascota;
+</script>
+
+</body>
+</html>
