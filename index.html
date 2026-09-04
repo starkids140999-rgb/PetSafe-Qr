@@ -210,6 +210,32 @@
       color: #f1f5f9;
     }
 
+    /* Estilos para el contacto de emergencia oculto */
+    .emergency-box {
+      background-color: var(--inner-card);
+      border: 1px dashed rgba(245, 158, 11, 0.4);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .btn-unlock-emergency {
+      background: transparent;
+      border: 1px solid var(--warning-border);
+      color: #f59e0b;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 6px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
     .btn-action {
       display: flex;
       align-items: center;
@@ -304,7 +330,7 @@
       outline: none;
     }
 
-    /* Estilos Filtros de Mascotas (Captura 2) */
+    /* Filtros Mascotas */
     .filter-tabs {
       display: flex;
       gap: 8px;
@@ -410,7 +436,7 @@
       font-weight: 500;
     }
 
-    /* Estilos Centro de Ayuda (Captura 1) */
+    /* Centro de Ayuda */
     .help-header-row {
       display: flex;
       justify-content: space-between;
@@ -527,7 +553,7 @@
         </div>
       </div>
 
-      <!-- VISTA 2: LISTA DE MASCOTAS (Sincronizada con Captura 2) -->
+      <!-- VISTA 2: LISTA DE MASCOTAS -->
       <div id="tab-mascotas" class="tab-content">
         <input type="text" class="input-field" placeholder="Buscar por nombre, raza o tutor..." oninput="filtrarMascotas(this.value)">
 
@@ -645,7 +671,7 @@
         </div>
       </div>
 
-      <!-- VISTA 4: CENTRO DE AYUDA (Sincronizada con Captura 1) -->
+      <!-- VISTA 4: CENTRO DE AYUDA -->
       <div id="tab-ayuda" class="tab-content">
         <div class="help-header-row">
           <h2 style="font-size:1.3rem; font-weight:800;">Centro de Ayuda</h2>
@@ -711,6 +737,7 @@
     const API_URL = "https://script.google.com/macros/s/AKfycbxxvZVQ547PYNuUyjjz3DBsjzaWaH8vy8PQEh59rLrkIVQx1YzWV-z1zSCuEOsKC6Q/exec";
     let telefonoTutor = "";
     let nombreMascota = "";
+    let contactoEmergencia = "";
 
     function cambiarTab(tabId, el) {
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
@@ -721,7 +748,6 @@
       if (el) {
         el.classList.add('active');
       } else {
-        // Asignar active al botón nav correspondiente si se llama desde JS interno
         const navBtns = document.querySelectorAll('.nav-btn');
         if (tabId === 'inicio') navBtns[0].classList.add('active');
         if (tabId === 'mascotas') navBtns[1].classList.add('active');
@@ -746,6 +772,7 @@
 
         telefonoTutor = data.telefono ? data.telefono.toString().replace(/[^0-9]/g, '') : "";
         nombreMascota = data.nombre || "la mascota";
+        contactoEmergencia = data.emergencia || "Lizbeth Ortiz";
 
         container.innerHTML = `
           ${data.foto ? `
@@ -771,12 +798,20 @@
             <div class="info-value">${data.tutor}</div>
           </div>
 
-          ${data.emergencia ? `
-            <div class="info-row">
-              <div class="info-label">Contacto de emergencia</div>
-              <div class="info-value">${data.emergencia}</div>
+          <!-- Módulo de Contacto de Emergencia Oculto -->
+          <div class="emergency-box">
+            <div class="info-label" style="color:#f59e0b; font-weight:700;">🆘 Apoyo de emergencia</div>
+            <div class="info-value" style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
+              <span>${contactoEmergencia}</span>
+              <span id="emergency-phone-display" style="font-size:0.85rem; color:var(--text-sub); letter-spacing:1px;">••••••••</span>
             </div>
-          ` : ''}
+
+            <div id="emergency-action-container">
+              <button class="btn-unlock-emergency" onclick="revelarContactoEmergencia()">
+                👁️ ¿No logras contactar al tutor? Mostrar teléfono de emergencia
+              </button>
+            </div>
+          </div>
 
           ${telefonoTutor ? `
             <a href="https://wa.me/${telefonoTutor}" target="_blank" class="btn-action btn-message">
@@ -806,6 +841,23 @@
       } catch (err) {
         container.innerHTML = `<div style="color:#fca5a5; text-align:center;">⚠️ Error al cargar los datos.</div>`;
       }
+    }
+
+    function revelarContactoEmergencia() {
+      const display = document.getElementById('emergency-phone-display');
+      const container = document.getElementById('emergency-action-container');
+
+      // Número de apoyo formateado o demo
+      const numEmergencia = "+593 99 876 5432";
+      display.innerText = numEmergencia;
+      display.style.color = "#38bdf8";
+      display.style.fontWeight = "700";
+
+      container.innerHTML = `
+        <a href="tel:${numEmergencia.replace(/[^0-9]/g, '')}" class="btn-action btn-call" style="margin-top:8px; background:#b45309; border:none;">
+          📞 Llamar a ${contactoEmergencia} ahora
+        </a>
+      `;
     }
 
     function cargarMascotaPorId(id) {
