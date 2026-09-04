@@ -7,15 +7,17 @@
   <style>
     :root {
       --bg-color: #0b0f19;
-      --card-bg: #151c2c;
-      --card-border: #232d42;
-      --accent-color: #6366f1;
+      --card-bg: #131b2e;
+      --inner-card: #1a243b;
+      --accent-blue: #3b82f6;
+      --accent-purple: #8b5cf6;
+      --accent-neon: #38bdf8;
       --text-main: #f8fafc;
       --text-sub: #94a3b8;
       --warning-bg: rgba(245, 158, 11, 0.1);
       --warning-border: #f59e0b;
-      --btn-green: #10b981;
-      --btn-blue: #3b82f6;
+      --status-lost: #ef4444;
+      --status-home: #10b981;
     }
 
     * {
@@ -25,355 +27,545 @@
     }
 
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       background-color: var(--bg-color);
       color: var(--text-main);
-      padding: 16px;
-      padding-bottom: 90px;
       display: flex;
       justify-content: center;
       min-height: 100vh;
+      padding: 0;
     }
 
-    .container {
+    /* Envoltorio principal para simular la app en móvil y escritorio */
+    .app-viewport {
       width: 100%;
-      max-width: 440px;
+      max-width: 450px;
+      background-color: #090d16;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      position: relative;
+      box-shadow: 0 0 50px rgba(0,0,0,0.8);
+      border-left: 1px solid rgba(255, 255, 255, 0.05);
+      border-right: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 80px;
     }
 
-    /* Cabecera con Logo Oficial */
+    /* Cabecera idéntica a tus capturas */
     .header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 4px 0;
+      padding: 16px;
+      background-color: rgba(9, 13, 22, 0.95);
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    .header-logo-img {
-      height: 48px;
-      width: auto;
-      object-fit: contain;
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    .header-user {
+    .logo-icon-box {
       width: 36px;
       height: 36px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #6366f1, #a855f7);
-      color: #fff;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: bold;
-      font-size: 0.9rem;
-      box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+      font-size: 1.2rem;
+      box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .brand-title {
+      font-weight: 800;
+      font-size: 1.15rem;
+      background: linear-gradient(to right, #ffffff, #a5f3fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.3px;
+    }
+
+    .user-avatar-pet {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid var(--accent-neon);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .content-container {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex: 1;
     }
 
     .banner {
-      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-      padding: 14px;
-      border-radius: 12px;
-      font-size: 0.85rem;
+      background: linear-gradient(135deg, #3b82f6 0%, #7c3aed 100%);
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-size: 0.82rem;
       line-height: 1.4;
       text-align: center;
-      box-shadow: 0 4px 15px rgba(124, 58, 237, 0.2);
+      font-weight: 500;
+      color: #ffffff;
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
     }
 
     .card {
       background-color: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 16px;
     }
 
-    /* Contenedor de Foto para no deformar/cortar */
-    .pet-photo-container {
+    /* Foto de la mascota */
+    .pet-photo-box {
       width: 100%;
-      height: 280px;
-      background-color: #0d1117;
-      border-radius: 12px;
+      height: 260px;
+      background-color: #030712;
+      border-radius: 14px;
       overflow: hidden;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid var(--card-border);
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    .pet-photo {
+    .pet-photo-img {
       width: 100%;
       height: 100%;
       object-fit: contain;
     }
 
-    .pet-name {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: #fff;
-      margin-bottom: 4px;
+    .pet-name-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
     }
 
-    .pet-badge {
-      display: inline-block;
-      background-color: rgba(99, 102, 241, 0.2);
-      color: #a5b4fc;
-      padding: 4px 12px;
+    .pet-name-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+    }
+
+    .pet-badge-type {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background-color: rgba(56, 189, 248, 0.12);
+      color: var(--accent-neon);
+      padding: 4px 10px;
       border-radius: 20px;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 600;
-      margin-bottom: 16px;
-      border: 1px solid rgba(99, 102, 241, 0.3);
+      border: 1px solid rgba(56, 189, 248, 0.2);
     }
 
     .alert-box {
       background-color: var(--warning-bg);
       border: 1px solid var(--warning-border);
       color: #fef3c7;
-      padding: 14px;
-      border-radius: 10px;
-      margin-bottom: 16px;
-      font-size: 0.9rem;
+      padding: 12px 14px;
+      border-radius: 12px;
+      margin-bottom: 14px;
+      font-size: 0.85rem;
       line-height: 1.4;
     }
 
     .alert-title {
       color: #f59e0b;
-      font-weight: bold;
+      font-weight: 700;
       margin-bottom: 4px;
       display: flex;
       align-items: center;
       gap: 6px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
     }
 
-    .info-group {
-      margin-bottom: 14px;
-      padding-bottom: 12px;
+    .info-row {
+      margin-bottom: 12px;
+      padding-bottom: 8px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .info-label {
       color: var(--text-sub);
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+      font-size: 0.75rem;
       margin-bottom: 2px;
     }
 
     .info-value {
-      font-size: 1.05rem;
-      font-weight: 500;
-      color: #e2e8f0;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #f1f5f9;
     }
 
+    /* Botones de acción seguros */
     .btn-action {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
       width: 100%;
-      padding: 14px;
-      border-radius: 10px;
+      padding: 13px;
+      border-radius: 12px;
       text-decoration: none;
       font-weight: 700;
-      font-size: 0.95rem;
-      margin-top: 10px;
-      transition: transform 0.1s, opacity 0.2s;
-    }
-
-    .btn-action:active {
-      transform: scale(0.98);
-    }
-
-    .btn-green {
-      background-color: var(--btn-green);
-      color: #022c22;
-    }
-
-    .btn-blue {
-      background-color: var(--btn-blue);
-      color: #0f172a;
-    }
-
-    .status-container {
-      text-align: center;
-      padding: 40px 10px;
-      color: var(--text-sub);
-    }
-
-    .error-box {
-      background-color: rgba(239, 68, 68, 0.1);
-      border: 1px solid #ef4444;
-      color: #fca5a5;
-      padding: 16px;
-      border-radius: 10px;
-      text-align: center;
-      font-size: 0.95rem;
-      line-height: 1.4;
-    }
-
-    /* Modal / Popup de Ayuda y Mascotas */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(4px);
-      z-index: 200;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .modal-content {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 20px;
-      max-width: 400px;
-      width: 100%;
-      color: var(--text-main);
-    }
-
-    .modal-header {
-      font-weight: bold;
-      font-size: 1.2rem;
-      margin-bottom: 12px;
-      color: #a5b4fc;
-    }
-
-    .modal-close {
-      margin-top: 16px;
-      background: var(--accent-color);
-      color: #fff;
+      font-size: 0.9rem;
+      margin-top: 8px;
+      transition: opacity 0.2s;
       border: none;
-      padding: 10px 16px;
-      border-radius: 8px;
-      width: 100%;
-      font-weight: bold;
       cursor: pointer;
     }
 
-    /* Barra de Navegación Móvil */
+    .btn-message {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: #ffffff;
+    }
+
+    .btn-call {
+      background: #1e293b;
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Vistas secundarias */
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Búsqueda y Lista de Mascotas */
+    .search-bar {
+      width: 100%;
+      padding: 12px 16px;
+      background-color: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .pet-item-card {
+      background-color: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .pet-item-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .pet-status-tag {
+      font-size: 0.7rem;
+      font-weight: bold;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    .status-lost {
+      background-color: rgba(239, 68, 68, 0.2);
+      color: #fca5a5;
+    }
+
+    .status-home {
+      background-color: rgba(16, 185, 129, 0.2);
+      color: #6ee7b7;
+    }
+
+    /* Formulario Ayuda */
+    .help-box {
+      background-color: var(--card-bg);
+      border-radius: 14px;
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .help-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--accent-neon);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .help-step {
+      margin-bottom: 12px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      color: var(--text-sub);
+    }
+
+    .help-step strong {
+      color: #fff;
+    }
+
+    .textarea-help {
+      width: 100%;
+      height: 80px;
+      background-color: var(--inner-card);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 10px;
+      color: #fff;
+      font-size: 0.85rem;
+      margin-top: 8px;
+      resize: none;
+    }
+
+    /* Navegación Inferior Flotante Estilo App */
     .app-nav {
       position: fixed;
       bottom: 0;
-      left: 0;
-      right: 0;
-      background-color: #111827;
-      border-top: 1px solid var(--card-border);
+      width: 100%;
+      max-width: 450px;
+      background-color: rgba(9, 13, 22, 0.95);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       justify-content: space-around;
       padding: 10px 0;
       z-index: 100;
+      backdrop-filter: blur(10px);
     }
 
-    .nav-item {
+    .nav-btn {
       display: flex;
       flex-direction: column;
       align-items: center;
       color: var(--text-sub);
       text-decoration: none;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       gap: 4px;
-      cursor: pointer;
       border: none;
       background: none;
+      cursor: pointer;
       width: 25%;
     }
 
-    .nav-item.active {
-      color: #818cf8;
+    .nav-btn.active {
+      color: var(--accent-neon);
       font-weight: bold;
     }
 
-    .nav-icon {
-      font-size: 1.2rem;
+    .nav-icon-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    .nav-btn.active .nav-icon-badge {
+      background-color: rgba(56, 189, 248, 0.15);
+    }
+
+    .error-card {
+      background-color: rgba(239, 68, 68, 0.1);
+      border: 1px solid #ef4444;
+      color: #fca5a5;
+      padding: 16px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 0.85rem;
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <div class="header">
-      <!-- Logo Oficial integrado directamente -->
-      <img src="https://i.ibb.co/L5B7D7y/petsafe-logo.jpg" alt="PetSafe QR Logo" class="header-logo-img">
-      <div class="header-user">S</div>
-    </div>
-
-    <div class="banner">
-      Este perfil usa la información real del registro conectado. Confirma la mascota antes de contactar a su tutor o tutora.
-    </div>
-
-    <div id="content" class="card">
-      <div id="status" class="status-container">
-        ⏳ Cargando información de la mascota...
+  <div class="app-viewport">
+    <!-- Cabecera Oficial -->
+    <header class="header">
+      <div class="brand-logo">
+        <div class="logo-icon-box">🐾</div>
+        <span class="brand-title">PetSafe QR</span>
       </div>
+      <div class="user-avatar-pet" title="Mascota">🐶🐱</div>
+    </header>
+
+    <div class="content-container">
+
+      <!-- VISTA 1: FICHA DE INICIO / MASCOTA -->
+      <div id="tab-inicio" class="tab-content active">
+        <div class="banner">
+          Este perfil usa la información real del registro conectado. Confirma la mascota antes de contactar a su tutor o tutora.
+        </div>
+
+        <div id="pet-data-container" class="card">
+          <div style="text-align: center; padding: 30px; color: var(--text-sub);">
+            ⏳ Cargando información de la mascota...
+          </div>
+        </div>
+      </div>
+
+      <!-- VISTA 2: LISTA DE MASCOTAS -->
+      <div id="tab-mascotas" class="tab-content">
+        <input type="text" class="search-bar" placeholder="Buscar por nombre, raza o tutor..." oninput="filtrarMascotas(this.value)">
+
+        <div id="pets-list">
+          <!-- Tarjeta Félix -->
+          <div class="pet-item-card" onclick="cargarMascotaPorId('PET001')">
+            <div class="pet-item-header">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-size:1.4rem;">🐱</span>
+                <div>
+                  <strong>Félix</strong>
+                  <div style="font-size:0.75rem; color:var(--text-sub);">Gato Americano Negro · Macho</div>
+                </div>
+              </div>
+              <span class="pet-status-tag status-lost">Perdida</span>
+            </div>
+            <div style="font-size:0.8rem; color:var(--text-sub); border-top:1px solid rgba(255,255,255,0.05); padding-top:6px; margin-top:4px;">
+              Tutor: <strong>María Rosario Ortiz Calsatasig</strong>
+            </div>
+          </div>
+
+          <!-- Tarjeta Rocky -->
+          <div class="pet-item-card" style="margin-top:10px;">
+            <div class="pet-item-header">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-size:1.4rem;">🐶</span>
+                <div>
+                  <strong>Rocky</strong>
+                  <div style="font-size:0.75rem; color:var(--text-sub);">Schnauzer Miniatura · Macho</div>
+                </div>
+              </div>
+              <span class="pet-status-tag status-lost">Perdida</span>
+            </div>
+            <div style="font-size:0.8rem; color:var(--text-sub); border-top:1px solid rgba(255,255,255,0.05); padding-top:6px; margin-top:4px;">
+              Tutor: <strong>Carlos David Mendoza</strong>
+            </div>
+          </div>
+
+          <!-- Tarjeta Luna -->
+          <div class="pet-item-card" style="margin-top:10px;">
+            <div class="pet-item-header">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-size:1.4rem;">🐕</span>
+                <div>
+                  <strong>Luna</strong>
+                  <div style="font-size:0.75rem; color:var(--text-sub);">Golden Retriever · Hembra</div>
+                </div>
+              </div>
+              <span class="pet-status-tag status-home">En casa</span>
+            </div>
+            <div style="font-size:0.8rem; color:var(--text-sub); border-top:1px solid rgba(255,255,255,0.05); padding-top:6px; margin-top:4px;">
+              Tutor: <strong>Valeria Gómez</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VISTA 3: CENTRO DE AYUDA -->
+      <div id="tab-ayuda" class="tab-content">
+        <div class="help-box">
+          <div class="help-title">🔒 Privacidad y Datos Protegidos</div>
+          <p style="font-size:0.82rem; color:var(--text-sub); line-height:1.4; margin-bottom:12px;">
+            PetSafe QR oculta los datos personales del tutor. Cuando encuentras una mascota y presionas "Contactar", el sistema utiliza un canal intermedio sin revelar el número privado ni dirección en la placa pública.
+          </p>
+          <div class="help-step">✔️ <strong>Sin rastreo invasivo:</strong> Ninguna persona ajena puede ver tu número sin autorización.</div>
+          <div class="help-step">✔️ <strong>Preferencia del tutor:</strong> El tutor define si acepta llamada, WhatsApp o mensaje privado.</div>
+        </div>
+
+        <div class="help-box">
+          <div class="help-title">🤝 Encontré una mascota: Paso a paso</div>
+          <div class="help-step"><strong>1. Revisa condiciones médicas:</strong> Verifica si tiene alergias o requiere medicación de urgencia.</div>
+          <div class="help-step"><strong>2. Resguarda en lugar seguro:</strong> Ofrécele agua fresca y evita movimientos bruscos.</div>
+          <div class="help-step"><strong>3. Envía el aviso al tutor:</strong> Usa los botones directos de contacto en la ficha.</div>
+        </div>
+
+        <div class="help-box">
+          <div class="help-title">❓ ¿Tienes dudas o problemas con una placa?</div>
+          <div style="font-size:0.8rem; color:var(--text-sub);">Escríbenos directamente si la placa está dañada o no logras contactar al tutor:</div>
+          <textarea class="textarea-help" placeholder="Ej. La placa está raspada y solo se lee el código..."></textarea>
+          <button class="btn-action btn-message" style="margin-top:8px;" onclick="alert('Mensaje de soporte enviado correctamente.')">Enviar a soporte</button>
+        </div>
+      </div>
+
     </div>
+
+    <!-- Menú NAVEGACIÓN INFERIOR DE LA APP -->
+    <nav class="app-nav">
+      <button class="nav-btn active" onclick="cambiarTab('inicio', this)">
+        <div class="nav-icon-badge">📲</div>
+        <span>Inicio</span>
+      </button>
+
+      <button class="nav-btn" onclick="cambiarTab('mascotas', this)">
+        <div class="nav-icon-badge">🔍</div>
+        <span>Mascotas</span>
+      </button>
+
+      <!-- Iniciar Sesión directo a Tally -->
+      <a href="https://tally.so/r/68BMZN" target="_blank" class="nav-btn">
+        <div class="nav-icon-badge">👤</div>
+        <span>Iniciar Sesión</span>
+      </a>
+
+      <button class="nav-btn" onclick="cambiarTab('ayuda', this)">
+        <div class="nav-icon-badge">❓</div>
+        <span>Ayuda</span>
+      </button>
+    </nav>
   </div>
-
-  <!-- Modal para información / ayuda / lista -->
-  <div id="modal" class="modal">
-    <div class="modal-content">
-      <div id="modal-title" class="modal-header">Título</div>
-      <div id="modal-body">Contenido...</div>
-      <button class="modal-close" onclick="cerrarModal()">Entendido</button>
-    </div>
-  </div>
-
-  <!-- Barra de Comandos Tipo App Móvil -->
-  <nav class="app-nav">
-    <button class="nav-item active" onclick="irInicio()">
-      <span class="nav-icon">📲</span>
-      <span>Inicio</span>
-    </button>
-
-    <button class="nav-item" onclick="abrirBuscarMascotas()">
-      <span class="nav-icon">🔍</span>
-      <span>Mascotas</span>
-    </button>
-
-    <!-- Redirección directa al registro/inicio de sesión de Tally -->
-    <a href="https://tally.so/r/68BMZN" target="_blank" class="nav-item">
-      <span class="nav-icon">👤</span>
-      <span>Iniciar Sesión</span>
-    </a>
-
-    <button class="nav-item" onclick="abrirAyuda()">
-      <span class="nav-icon">❓</span>
-      <span>Ayuda</span>
-    </button>
-  </nav>
 
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbxxvZVQ547PYNuUyjjz3DBsjzaWaH8vy8PQEh59rLrkIVQx1YzWV-z1zSCuEOsKC6Q/exec";
 
-    async function cargarMascota() {
-      const contentEl = document.getElementById('content');
-      
-      const urlParams = new URLSearchParams(window.location.search);
-      const petId = urlParams.get('id');
+    function cambiarTab(tabId, el) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
 
-      if (!petId) {
-        contentEl.innerHTML = `
-          <div class="error-box">
-            <strong>⚠️ Parámetro faltante</strong><br/>
-            No se incluyó el identificador de la mascota en la URL.<br/><br/>
-            <small>Ejemplo de uso: ?id=PET001</small>
-          </div>
-        `;
-        return;
-      }
+      document.getElementById(`tab-${tabId}`).classList.add('active');
+      if (el) el.classList.add('active');
+    }
+
+    async function cargarMascota() {
+      const container = document.getElementById('pet-data-container');
+      const urlParams = new URLSearchParams(window.location.search);
+      let petId = urlParams.get('id');
+
+      if (!petId) petId = "PET001"; // ID por defecto para pruebas si ingresan a la URL limpia
 
       try {
         const res = await fetch(`${API_URL}?id=${encodeURIComponent(petId)}`);
         const data = await res.json();
 
         if (data.error) {
-          contentEl.innerHTML = `
-            <div class="error-box">
+          container.innerHTML = `
+            <div class="error-card">
               <strong>⚠️ No encontrado</strong><br/>
               ${data.error}
             </div>
@@ -381,14 +573,17 @@
           return;
         }
 
-        contentEl.innerHTML = `
+        container.innerHTML = `
           ${data.foto ? `
-            <div class="pet-photo-container">
-              <img src="${data.foto}" class="pet-photo" alt="${data.nombre}">
+            <div class="pet-photo-box">
+              <img src="${data.foto}" class="pet-photo-img" alt="${data.nombre}">
             </div>
           ` : ''}
-          <div class="pet-name">${data.nombre}</div>
-          <div class="pet-badge">🐾 ${data.especie}</div>
+
+          <div class="pet-name-header">
+            <span class="pet-name-title">${data.nombre}</span>
+            <span class="pet-badge-type">🐾 ${data.especie}</span>
+          </div>
 
           ${data.cuidados ? `
             <div class="alert-box">
@@ -397,72 +592,48 @@
             </div>
           ` : ''}
 
-          <div class="info-group">
-            <div class="info-label">Tutor/a registrado</div>
+          <div class="info-row">
+            <div class="info-label">Tutor registrado</div>
             <div class="info-value">${data.tutor}</div>
           </div>
 
           ${data.emergencia ? `
-            <div class="info-group">
+            <div class="info-row">
               <div class="info-label">Contacto de emergencia</div>
               <div class="info-value">${data.emergencia}</div>
             </div>
           ` : ''}
 
           ${data.telefono ? `
-            <a href="https://wa.me/${data.telefono.toString().replace(/[^0-9]/g, '')}" target="_blank" class="btn-action btn-green">
-              💬 Enviar mensaje seguro al tutor/a
+            <a href="https://wa.me/${data.telefono.toString().replace(/[^0-9]/g, '')}" target="_blank" class="btn-action btn-message">
+              💬 Enviar mensaje seguro al tutor
             </a>
-            <a href="tel:${data.telefono}" class="btn-action btn-blue">
-              📞 Llamar al tutor/a (${data.telefono})
+            <a href="tel:${data.telefono}" class="btn-action btn-call">
+              📞 Llamar mediante enlace privado
             </a>
           ` : ''}
         `;
 
-      } catch (error) {
-        contentEl.innerHTML = `
-          <div class="error-box">
-            <strong>⚠️ Error de comunicación</strong><br/>
-            No fue posible consultar la base de datos de PetSafe QR.<br/>
-            <small>${error.message}</small>
+      } catch (err) {
+        container.innerHTML = `
+          <div class="error-card">
+            <strong>⚠️ Error de conexión</strong><br/>
+            No se pudieron obtener los datos de la hoja de cálculo.
           </div>
         `;
       }
     }
 
-    // Funciones interactivas de la App
-    function irInicio() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const petId = urlParams.get('id');
-      if (petId) {
-        window.location.reload();
-      } else {
-        alert("Escanea un código QR de PetSafe o ingresa una URL con ID para ver una mascota.");
-      }
+    function cargarMascotaPorId(id) {
+      window.location.search = `?id=${id}`;
     }
 
-    function abrirBuscarMascotas() {
-      const petId = prompt("Ingresa el ID de la mascota a consultar (Ejemplo: PET001):");
-      if (petId) {
-        window.location.search = `?id=${petId.trim()}`;
-      }
-    }
-
-    function abrirAyuda() {
-      document.getElementById('modal-title').innerText = "🐾 Ayuda - PetSafe QR";
-      document.getElementById('modal-body').innerHTML = `
-        <p style="font-size: 0.9rem; line-height: 1.5; color: #94a3b8;">
-          <strong>¿Encontraste a una mascota perdida?</strong><br>
-          Utiliza los botones de llamada o WhatsApp para ponerte en contacto directo y seguro con su tutor registrado.<br><br>
-          <strong>¿Quieres registrar a tu mascota?</strong><br>
-          Haz clic en la pestaña <em>"Iniciar Sesión"</em> en la barra inferior para acceder al formulario oficial de registro de Tally.
-        </p>
-      `;
-      document.getElementById('modal').style.display = 'flex';
-    }
-
-    function cerrarModal() {
-      document.getElementById('modal').style.display = 'none';
+    function filtrarMascotas(query) {
+      const q = query.toLowerCase();
+      document.querySelectorAll('.pet-item-card').forEach(card => {
+        const texto = card.innerText.toLowerCase();
+        card.style.display = texto.includes(q) ? 'flex' : 'none';
+      });
     }
 
     cargarMascota();
