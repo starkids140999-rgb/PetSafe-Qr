@@ -1,3 +1,11 @@
+Aquí tienes el código completo y actualizado para tu archivo **`index.html`**, integrando:
+
+* **Separación de número de emergencia:** Oculto tras `••••••••` para mayor privacidad.
+* **Badges de estado:** Formato *"Perdido"* / *"Con tutor"*.
+* **Mensajes automáticos en WhatsApp:** Incluyen la mención a **PetSafe QR** y cambian según el estado de la mascota.
+* **Actualización en tiempo real:** Control de caché (`&t=Date.now()`) para reflejar los cambios de tu tabla de Google Sheets de inmediato.
+
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -562,7 +570,6 @@
 
     <div class="content-container">
 
-      <!-- VISTA 1: FICHA DE LA MASCOTA -->
       <div id="tab-inicio" class="tab-content active">
         <div class="banner">
           Este perfil usa la información real del registro conectado. Confirma la mascota antes de contactar a su tutor o tutora.
@@ -575,7 +582,6 @@
         </div>
       </div>
 
-      <!-- VISTA 2: LISTA DE MASCOTAS -->
       <div id="tab-mascotas" class="tab-content">
         <input type="text" class="input-field" placeholder="Buscar por nombre, raza o tutor..." oninput="filtrarMascotas(this.value)">
 
@@ -587,7 +593,6 @@
 
         <div id="pets-list" style="display:flex; flex-direction:column; gap:12px;">
           
-          <!-- Félix -->
           <div class="pet-card-list" data-status="perdida" onclick="cargarMascotaPorId('PET001')">
             <div class="pet-card-top">
               <div class="pet-type-avatar">
@@ -611,7 +616,6 @@
             </div>
           </div>
 
-          <!-- Rocky -->
           <div class="pet-card-list" data-status="perdida">
             <div class="pet-card-top">
               <div class="pet-type-avatar">
@@ -635,7 +639,6 @@
             </div>
           </div>
 
-          <!-- Luna -->
           <div class="pet-card-list" data-status="casa">
             <div class="pet-card-top">
               <div class="pet-type-avatar">
@@ -662,7 +665,6 @@
         </div>
       </div>
 
-      <!-- VISTA 3: INICIAR SESIÓN / REGISTRO -->
       <div id="tab-login" class="tab-content">
         <div class="card">
           <h2 style="font-size:1.3rem; margin-bottom:6px;">Iniciar Sesión</h2>
@@ -693,7 +695,6 @@
         </div>
       </div>
 
-      <!-- VISTA 4: CENTRO DE AYUDA -->
       <div id="tab-ayuda" class="tab-content">
         <div class="help-header-row">
           <h2 style="font-size:1.3rem; font-weight:800;">Centro de Ayuda</h2>
@@ -803,7 +804,8 @@
       let petId = urlParams.get('id') || "PET001";
 
       try {
-        const res = await fetch(`${API_URL}?id=${encodeURIComponent(petId)}`);
+        // Se añade timestamp (&t=...) para evitar caché y actualizar inmediatamente
+        const res = await fetch(`${API_URL}?id=${encodeURIComponent(petId)}&t=${Date.now()}`);
         const data = await res.json();
 
         if (data.error) {
@@ -818,12 +820,18 @@
         nombreEmergencia = parsedEmergencia.nombre;
         telefonoEmergenciaReal = parsedEmergencia.numero;
 
-        const estadoTexto = (data.estado && data.estado.toLowerCase().includes('casa')) ? "Con tutor" : "Perdido";
-        const estadoClase = estadoTexto === "Con tutor" ? "casa" : "perdido";
-        const estadoEmoji = estadoTexto === "Con tutor" ? "🏠" : "🚨";
+        // Evaluación dinámica del estado desde la hoja de cálculo
+        const estadoRaw = (data.estado || "").toLowerCase();
+        const estaEnCasa = estadoRaw.includes('casa') || estadoRaw.includes('tutor') || estadoRaw.includes('encontrad') || estadoRaw.includes('normal');
+        
+        const estadoTexto = estaEnCasa ? "Con tutor" : "Perdido";
+        const estadoClase = estaEnCasa ? "casa" : "perdido";
+        const estadoEmoji = estaEnCasa ? "🏠" : "🚨";
 
-        // Mensaje automático predeterminado incluyendo PetSafe QR
-        const mensajeAuto = encodeURIComponent(`Hola, estoy viendo el perfil de ${nombreMascota} en PetSafe QR. Encontré a la mascota o tengo información sobre su paradero. Por favor ponte en contacto conmigo.`);
+        // Mensaje automático personalizado incluyendo PetSafe QR
+        const mensajeAuto = estaEnCasa 
+          ? encodeURIComponent(`Hola, estoy viendo el perfil de ${nombreMascota} en PetSafe QR y quisiera ponerme en contacto contigo.`)
+          : encodeURIComponent(`Hola, estoy viendo el perfil de ${nombreMascota} en PetSafe QR. Encontré a la mascota o tengo información sobre su paradero. Por favor ponte en contacto conmigo.`);
 
         container.innerHTML = `
           ${data.foto ? `
@@ -963,6 +971,12 @@
       });
     }
 
+    cargarMascota();
+  </script>
+</body>
+</html>
+
+```
     cargarMascota();
   </script>
 </body>
