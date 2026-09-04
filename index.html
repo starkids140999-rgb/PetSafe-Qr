@@ -172,7 +172,6 @@
       border: 1px solid rgba(56, 189, 248, 0.2);
     }
 
-    /* Insignias de Estado */
     .status-badge {
       display: inline-flex;
       align-items: center;
@@ -236,7 +235,6 @@
       color: #f1f5f9;
     }
 
-    /* Módulo Apoyo de Emergencia Oculto */
     .emergency-box {
       background-color: var(--inner-card);
       border: 1px dashed rgba(245, 158, 11, 0.4);
@@ -356,7 +354,6 @@
       outline: none;
     }
 
-    /* Filtros Mascotas */
     .filter-tabs {
       display: flex;
       gap: 8px;
@@ -462,7 +459,6 @@
       font-weight: 500;
     }
 
-    /* Centro de Ayuda */
     .help-header-row {
       display: flex;
       justify-content: space-between;
@@ -786,7 +782,6 @@
     function parsearContactoEmergencia(cadenaRaw) {
       if (!cadenaRaw) return { nombre: "Contacto de Apoyo", numero: "" };
       
-      // Separa el texto si viene en formato "Nombre : 099999999" o similar
       const partes = cadenaRaw.split(':');
       if (partes.length >= 2) {
         const nombre = partes[0].trim();
@@ -794,7 +789,6 @@
         return { nombre, numero };
       }
       
-      // Si sólo viene un número
       const soloNumeros = cadenaRaw.replace(/[^0-9]/g, '');
       if (soloNumeros.length > 6) {
         return { nombre: "Contacto de Apoyo", numero: soloNumeros };
@@ -820,15 +814,16 @@
         telefonoTutor = data.telefono ? data.telefono.toString().replace(/[^0-9]/g, '') : "";
         nombreMascota = data.nombre || "la mascota";
 
-        // Procesa el contacto de emergencia para separar el nombre del número
         const parsedEmergencia = parsearContactoEmergencia(data.emergencia);
         nombreEmergencia = parsedEmergencia.nombre;
         telefonoEmergenciaReal = parsedEmergencia.numero;
 
-        // Determinar el Estado (Perdido / Con tutor)
         const estadoTexto = (data.estado && data.estado.toLowerCase().includes('casa')) ? "Con tutor" : "Perdido";
         const estadoClase = estadoTexto === "Con tutor" ? "casa" : "perdido";
         const estadoEmoji = estadoTexto === "Con tutor" ? "🏠" : "🚨";
+
+        // Mensaje automático predeterminado incluyendo PetSafe QR
+        const mensajeAuto = encodeURIComponent(`Hola, estoy viendo el perfil de ${nombreMascota} en PetSafe QR. Encontré a la mascota o tengo información sobre su paradero. Por favor ponte en contacto conmigo.`);
 
         container.innerHTML = `
           ${data.foto ? `
@@ -858,7 +853,6 @@
             <div class="info-value">${data.tutor}</div>
           </div>
 
-          <!-- Módulo de Contacto de Emergencia Oculto -->
           <div class="emergency-box">
             <div class="info-label" style="color:#f59e0b; font-weight:700;">🆘 Apoyo de emergencia</div>
             <div class="info-value" style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
@@ -874,7 +868,7 @@
           </div>
 
           ${telefonoTutor ? `
-            <a href="https://wa.me/${telefonoTutor}" target="_blank" class="btn-action btn-message">
+            <a href="https://wa.me/${telefonoTutor}?text=${mensajeAuto}" target="_blank" class="btn-action btn-message">
               💬 Enviar mensaje seguro al tutor
             </a>
             <a href="tel:${telefonoTutor}" class="btn-action btn-call">
@@ -934,7 +928,7 @@
           const lat = pos.coords.latitude;
           const lon = pos.coords.longitude;
           const mapsUrl = `https://maps.google.com/?q=${lat},${lon}`;
-          const mensaje = encodeURIComponent(`Hola, encontré a ${nombreMascota}. Esta es mi ubicación actual: ${mapsUrl}`);
+          const mensaje = encodeURIComponent(`Hola, encontré a ${nombreMascota} usando la placa PetSafe QR. Esta es mi ubicación actual para el rescate: ${mapsUrl}`);
 
           if (telefonoTutor) {
             window.open(`https://wa.me/${telefonoTutor}?text=${mensaje}`, '_blank');
