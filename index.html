@@ -33,10 +33,8 @@
       display: flex;
       justify-content: center;
       min-height: 100vh;
-      padding: 0;
     }
 
-    /* Envoltorio principal para simular la app en móvil y escritorio */
     .app-viewport {
       width: 100%;
       max-width: 450px;
@@ -51,7 +49,6 @@
       padding-bottom: 80px;
     }
 
-    /* Cabecera idéntica a tus capturas */
     .header {
       display: flex;
       align-items: center;
@@ -89,7 +86,6 @@
       background: linear-gradient(to right, #ffffff, #a5f3fc);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      letter-spacing: -0.3px;
     }
 
     .user-avatar-pet {
@@ -121,7 +117,6 @@
       text-align: center;
       font-weight: 500;
       color: #ffffff;
-      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
     }
 
     .card {
@@ -131,7 +126,6 @@
       padding: 16px;
     }
 
-    /* Foto de la mascota */
     .pet-photo-box {
       width: 100%;
       height: 260px;
@@ -196,7 +190,6 @@
       gap: 6px;
       font-size: 0.8rem;
       text-transform: uppercase;
-      letter-spacing: 0.03em;
     }
 
     .info-row {
@@ -217,7 +210,6 @@
       color: #f1f5f9;
     }
 
-    /* Botones de acción seguros */
     .btn-action {
       display: flex;
       align-items: center;
@@ -230,7 +222,6 @@
       font-weight: 700;
       font-size: 0.9rem;
       margin-top: 8px;
-      transition: opacity 0.2s;
       border: none;
       cursor: pointer;
     }
@@ -246,7 +237,53 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    /* Vistas secundarias */
+    .btn-gps {
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-google {
+      background: #ffffff;
+      color: #0f172a;
+      font-weight: 600;
+    }
+
+    /* Módulo GPS estilo imagen */
+    .gps-box {
+      background-color: var(--inner-card);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 14px;
+      margin-top: 14px;
+    }
+
+    .gps-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .gps-desc {
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+
+    .privacy-footer-note {
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-sub);
+      line-height: 1.4;
+      margin-top: 14px;
+      padding: 0 8px;
+    }
+
     .tab-content {
       display: none;
     }
@@ -257,94 +294,18 @@
       gap: 14px;
     }
 
-    /* Búsqueda y Lista de Mascotas */
-    .search-bar {
+    .input-field {
       width: 100%;
-      padding: 12px 16px;
-      background-color: var(--card-bg);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      color: #fff;
-      font-size: 0.9rem;
-      outline: none;
-    }
-
-    .pet-item-card {
-      background-color: var(--card-bg);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 14px;
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .pet-item-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .pet-status-tag {
-      font-size: 0.7rem;
-      font-weight: bold;
-      padding: 2px 8px;
-      border-radius: 10px;
-    }
-
-    .status-lost {
-      background-color: rgba(239, 68, 68, 0.2);
-      color: #fca5a5;
-    }
-
-    .status-home {
-      background-color: rgba(16, 185, 129, 0.2);
-      color: #6ee7b7;
-    }
-
-    /* Formulario Ayuda */
-    .help-box {
-      background-color: var(--card-bg);
-      border-radius: 14px;
-      padding: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .help-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-      color: var(--accent-neon);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .help-step {
-      margin-bottom: 12px;
-      font-size: 0.85rem;
-      line-height: 1.4;
-      color: var(--text-sub);
-    }
-
-    .help-step strong {
-      color: #fff;
-    }
-
-    .textarea-help {
-      width: 100%;
-      height: 80px;
+      padding: 12px;
       background-color: var(--inner-card);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 10px;
-      padding: 10px;
       color: #fff;
-      font-size: 0.85rem;
-      margin-top: 8px;
-      resize: none;
+      font-size: 0.9rem;
+      margin-top: 6px;
+      outline: none;
     }
 
-    /* Navegación Inferior Flotante Estilo App */
     .app-nav {
       position: fixed;
       bottom: 0;
@@ -391,33 +352,22 @@
     .nav-btn.active .nav-icon-badge {
       background-color: rgba(56, 189, 248, 0.15);
     }
-
-    .error-card {
-      background-color: rgba(239, 68, 68, 0.1);
-      border: 1px solid #ef4444;
-      color: #fca5a5;
-      padding: 16px;
-      border-radius: 12px;
-      text-align: center;
-      font-size: 0.85rem;
-    }
   </style>
 </head>
 <body>
 
   <div class="app-viewport">
-    <!-- Cabecera Oficial -->
     <header class="header">
       <div class="brand-logo">
         <div class="logo-icon-box">🐾</div>
         <span class="brand-title">PetSafe QR</span>
       </div>
-      <div class="user-avatar-pet" title="Mascota">🐶🐱</div>
+      <div class="user-avatar-pet">🐶🐱</div>
     </header>
 
     <div class="content-container">
 
-      <!-- VISTA 1: FICHA DE INICIO / MASCOTA -->
+      <!-- VISTA 1: FICHA DE LA MASCOTA -->
       <div id="tab-inicio" class="tab-content active">
         <div class="banner">
           Este perfil usa la información real del registro conectado. Confirma la mascota antes de contactar a su tutor o tutora.
@@ -430,93 +380,63 @@
         </div>
       </div>
 
-      <!-- VISTA 2: LISTA DE MASCOTAS -->
-      <div id="tab-mascotas" class="tab-content">
-        <input type="text" class="search-bar" placeholder="Buscar por nombre, raza o tutor..." oninput="filtrarMascotas(this.value)">
+      <!-- VISTA 2: INICIAR SESIÓN / REGISTRO -->
+      <div id="tab-login" class="tab-content">
+        <div class="card">
+          <h2 style="font-size:1.3rem; margin-bottom:6px;">Iniciar Sesión</h2>
+          <p style="font-size:0.8rem; color:var(--text-sub); margin-bottom:16px;">Accede a la gestión de tus placas PetSafe QR</p>
 
-        <div id="pets-list">
-          <!-- Tarjeta Félix -->
-          <div class="pet-item-card" onclick="cargarMascotaPorId('PET001')">
-            <div class="pet-item-header">
-              <div style="display:flex; align-items:center; gap:8px;">
-                <span style="font-size:1.4rem;">🐱</span>
-                <div>
-                  <strong>Félix</strong>
-                  <div style="font-size:0.75rem; color:var(--text-sub);">Gato Americano Negro · Macho</div>
-                </div>
-              </div>
-              <span class="pet-status-tag status-lost">Perdida</span>
-            </div>
-            <div style="font-size:0.8rem; color:var(--text-sub); border-top:1px solid rgba(255,255,255,0.05); padding-top:6px; margin-top:4px;">
-              Tutor: <strong>María Rosario Ortiz Calsatasig</strong>
-            </div>
-          </div>
+          <button class="btn-action btn-google" onclick="alert('Iniciando sesión con Google...')">
+            <span style="font-size:1.1rem;">🌐</span> Continuar con Google
+          </button>
 
-          <!-- Tarjeta Rocky -->
-          <div class="pet-item-card" style="margin-top:10px;">
-            <div class="pet-item-header">
-              <div style="display:flex; align-items:center; gap:8px;">
-                <span style="font-size:1.4rem;">🐶</span>
-                <div>
-                  <strong>Rocky</strong>
-                  <div style="font-size:0.75rem; color:var(--text-sub);">Schnauzer Miniatura · Macho</div>
-                </div>
-              </div>
-              <span class="pet-status-tag status-lost">Perdida</span>
-            </div>
-            <div style="font-size:0.8rem; color:var(--text-sub); border-top:1px solid rgba(255,255,255,0.05); padding-top:6px; margin-top:4px;">
-              Tutor: <strong>Carlos David Mendoza</strong>
-            </div>
-          </div>
+          <div style="text-align:center; color:var(--text-sub); font-size:0.75rem; margin:14px 0;">— o con tu correo —</div>
 
-          <!-- Tarjeta Luna -->
-          <div class="pet-item-card" style="margin-top:10px;">
-            <div class="pet-item-header">
-              <div style="display:flex; align-items:center; gap:8px;">
-                <span style="font-size:1.4rem;">🐕</span>
-                <div>
-                  <strong>Luna</strong>
-                  <div style="font-size:0.75rem; color:var(--text-sub);">Golden Retriever · Hembra</div>
-                </div>
-              </div>
-              <span class="pet-status-tag status-home">En casa</span>
-            </div>
-            <div style="font-size:0.8rem; color:var(--text-sub); border-top:1px solid rgba(255,255,255,0.05); padding-top:6px; margin-top:4px;">
-              Tutor: <strong>Valeria Gómez</strong>
-            </div>
+          <label style="font-size:0.8rem; color:var(--text-sub);">Correo electrónico</label>
+          <input type="email" class="input-field" placeholder="ejemplo@correo.com">
+
+          <label style="font-size:0.8rem; color:var(--text-sub); margin-top:10px; display:block;">Contraseña</label>
+          <input type="password" class="input-field" placeholder="••••••••">
+
+          <button class="btn-action btn-message" style="margin-top:16px;" onclick="alert('Iniciando sesión...')">
+            Ingresar
+          </button>
+
+          <div style="border-top:1px solid rgba(255,255,255,0.08); margin-top:20px; padding-top:16px; text-align:center;">
+            <p style="font-size:0.82rem; color:var(--text-sub);">¿Aún no tienes una cuenta o deseas registrar una placa?</p>
+            <a href="https://tally.so/r/68BMZN" target="_blank" class="btn-action btn-call" style="margin-top:10px; text-decoration:none;">
+              📝 Registrarse en Tally
+            </a>
           </div>
         </div>
       </div>
 
-      <!-- VISTA 3: CENTRO DE AYUDA -->
+      <!-- VISTA 3: MASCOTAS -->
+      <div id="tab-mascotas" class="tab-content">
+        <input type="text" class="input-field" placeholder="Buscar por nombre, raza o tutor..." style="margin-bottom:10px;">
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong>Félix</strong>
+              <div style="font-size:0.75rem; color:var(--text-sub);">Gato Americano Negro</div>
+            </div>
+            <span style="background:rgba(239,68,68,0.2); color:#fca5a5; font-size:0.7rem; padding:2px 8px; border-radius:10px;">Perdida</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- VISTA 4: AYUDA -->
       <div id="tab-ayuda" class="tab-content">
-        <div class="help-box">
-          <div class="help-title">🔒 Privacidad y Datos Protegidos</div>
-          <p style="font-size:0.82rem; color:var(--text-sub); line-height:1.4; margin-bottom:12px;">
-            PetSafe QR oculta los datos personales del tutor. Cuando encuentras una mascota y presionas "Contactar", el sistema utiliza un canal intermedio sin revelar el número privado ni dirección en la placa pública.
+        <div class="card">
+          <h3 style="color:var(--accent-neon); margin-bottom:8px;">🔒 Privacidad PetSafe QR</h3>
+          <p style="font-size:0.82rem; color:var(--text-sub); line-height:1.4;">
+            Los datos personales del tutor están protegidos. El sistema establece comunicación segura sin exponer números privados en la placa física.
           </p>
-          <div class="help-step">✔️ <strong>Sin rastreo invasivo:</strong> Ninguna persona ajena puede ver tu número sin autorización.</div>
-          <div class="help-step">✔️ <strong>Preferencia del tutor:</strong> El tutor define si acepta llamada, WhatsApp o mensaje privado.</div>
-        </div>
-
-        <div class="help-box">
-          <div class="help-title">🤝 Encontré una mascota: Paso a paso</div>
-          <div class="help-step"><strong>1. Revisa condiciones médicas:</strong> Verifica si tiene alergias o requiere medicación de urgencia.</div>
-          <div class="help-step"><strong>2. Resguarda en lugar seguro:</strong> Ofrécele agua fresca y evita movimientos bruscos.</div>
-          <div class="help-step"><strong>3. Envía el aviso al tutor:</strong> Usa los botones directos de contacto en la ficha.</div>
-        </div>
-
-        <div class="help-box">
-          <div class="help-title">❓ ¿Tienes dudas o problemas con una placa?</div>
-          <div style="font-size:0.8rem; color:var(--text-sub);">Escríbenos directamente si la placa está dañada o no logras contactar al tutor:</div>
-          <textarea class="textarea-help" placeholder="Ej. La placa está raspada y solo se lee el código..."></textarea>
-          <button class="btn-action btn-message" style="margin-top:8px;" onclick="alert('Mensaje de soporte enviado correctamente.')">Enviar a soporte</button>
         </div>
       </div>
 
     </div>
 
-    <!-- Menú NAVEGACIÓN INFERIOR DE LA APP -->
     <nav class="app-nav">
       <button class="nav-btn active" onclick="cambiarTab('inicio', this)">
         <div class="nav-icon-badge">📲</div>
@@ -528,11 +448,10 @@
         <span>Mascotas</span>
       </button>
 
-      <!-- Iniciar Sesión directo a Tally -->
-      <a href="https://tally.so/r/68BMZN" target="_blank" class="nav-btn">
+      <button class="nav-btn" onclick="cambiarTab('login', this)">
         <div class="nav-icon-badge">👤</div>
         <span>Iniciar Sesión</span>
-      </a>
+      </button>
 
       <button class="nav-btn" onclick="cambiarTab('ayuda', this)">
         <div class="nav-icon-badge">❓</div>
@@ -543,6 +462,8 @@
 
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbxxvZVQ547PYNuUyjjz3DBsjzaWaH8vy8PQEh59rLrkIVQx1YzWV-z1zSCuEOsKC6Q/exec";
+    let telefonoTutor = "";
+    let nombreMascota = "";
 
     function cambiarTab(tabId, el) {
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
@@ -555,23 +476,19 @@
     async function cargarMascota() {
       const container = document.getElementById('pet-data-container');
       const urlParams = new URLSearchParams(window.location.search);
-      let petId = urlParams.get('id');
-
-      if (!petId) petId = "PET001"; // ID por defecto para pruebas si ingresan a la URL limpia
+      let petId = urlParams.get('id') || "PET001";
 
       try {
         const res = await fetch(`${API_URL}?id=${encodeURIComponent(petId)}`);
         const data = await res.json();
 
         if (data.error) {
-          container.innerHTML = `
-            <div class="error-card">
-              <strong>⚠️ No encontrado</strong><br/>
-              ${data.error}
-            </div>
-          `;
+          container.innerHTML = `<div style="color:#fca5a5; text-align:center;">⚠️ ${data.error}</div>`;
           return;
         }
+
+        telefonoTutor = data.telefono ? data.telefono.toString().replace(/[^0-9]/g, '') : "";
+        nombreMascota = data.nombre || "la mascota";
 
         container.innerHTML = `
           ${data.foto ? `
@@ -604,36 +521,59 @@
             </div>
           ` : ''}
 
-          ${data.telefono ? `
-            <a href="https://wa.me/${data.telefono.toString().replace(/[^0-9]/g, '')}" target="_blank" class="btn-action btn-message">
+          ${telefonoTutor ? `
+            <a href="https://wa.me/${telefonoTutor}" target="_blank" class="btn-action btn-message">
               💬 Enviar mensaje seguro al tutor
             </a>
-            <a href="tel:${data.telefono}" class="btn-action btn-call">
+            <a href="tel:${telefonoTutor}" class="btn-action btn-call">
               📞 Llamar mediante enlace privado
             </a>
           ` : ''}
+
+          <div class="gps-box">
+            <div class="gps-title">📍 Activar ubicación de rescate</div>
+            <div class="gps-desc">
+              Tu navegador solicitará permiso GPS. Solo se enviará una coordenada aproximada al tutor para avisarle en qué punto exacto fue encontrado ${nombreMascota}.
+            </div>
+            <button class="btn-action btn-gps" onclick="enviarUbicacionGPS()">
+              Compartir mi ubicación actual con el tutor
+            </button>
+          </div>
+
+          <div class="privacy-footer-note">
+            🛡️ <strong>Privacidad PetSafe QR protegida</strong><br>
+            El número telefónico permanece oculto para proteger la identidad de la familia.
+          </div>
         `;
 
       } catch (err) {
-        container.innerHTML = `
-          <div class="error-card">
-            <strong>⚠️ Error de conexión</strong><br/>
-            No se pudieron obtener los datos de la hoja de cálculo.
-          </div>
-        `;
+        container.innerHTML = `<div style="color:#fca5a5; text-align:center;">⚠️ Error al cargar los datos.</div>`;
       }
     }
 
-    function cargarMascotaPorId(id) {
-      window.location.search = `?id=${id}`;
-    }
+    function enviarUbicacionGPS() {
+      if (!navigator.geolocation) {
+        alert("Tu navegador no soporta geolocalización.");
+        return;
+      }
 
-    function filtrarMascotas(query) {
-      const q = query.toLowerCase();
-      document.querySelectorAll('.pet-item-card').forEach(card => {
-        const texto = card.innerText.toLowerCase();
-        card.style.display = texto.includes(q) ? 'flex' : 'none';
-      });
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
+          const mapsUrl = `https://maps.google.com/?q=${lat},${lon}`;
+          const mensaje = encodeURIComponent(`Hola, encontré a ${nombreMascota}. Esta es mi ubicación actual: ${mapsUrl}`);
+
+          if (telefonoTutor) {
+            window.open(`https://wa.me/${telefonoTutor}?text=${mensaje}`, '_blank');
+          } else {
+            alert(`Ubicación obtenida: ${mapsUrl}`);
+          }
+        },
+        () => {
+          alert("No se pudo obtener la ubicación. Por favor concede permisos GPS a tu navegador.");
+        }
+      );
     }
 
     cargarMascota();
