@@ -249,7 +249,6 @@
       font-weight: 600;
     }
 
-    /* Módulo GPS estilo imagen */
     .gps-box {
       background-color: var(--inner-card);
       border: 1px solid rgba(255, 255, 255, 0.08);
@@ -302,8 +301,156 @@
       border-radius: 10px;
       color: #fff;
       font-size: 0.9rem;
-      margin-top: 6px;
       outline: none;
+    }
+
+    /* Estilos Filtros de Mascotas (Captura 2) */
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      margin-bottom: 8px;
+    }
+
+    .filter-chip {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      background-color: var(--inner-card);
+      color: var(--text-sub);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      cursor: pointer;
+    }
+
+    .filter-chip.active {
+      background-color: rgba(56, 189, 248, 0.15);
+      color: var(--accent-neon);
+      border-color: var(--accent-neon);
+      font-weight: 600;
+    }
+
+    .pet-card-list {
+      background-color: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .pet-card-top {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .pet-type-avatar {
+      width: 50px;
+      height: 50px;
+      background-color: #1e293b;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .pet-type-label {
+      font-size: 0.65rem;
+      color: var(--text-sub);
+      margin-top: -2px;
+    }
+
+    .pet-card-info {
+      flex: 1;
+    }
+
+    .pet-card-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .status-badge-lost {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #fca5a5;
+    }
+
+    .status-badge-home {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #6ee7b7;
+    }
+
+    .pet-medical-note {
+      background-color: rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 0.75rem;
+      color: var(--text-sub);
+      line-height: 1.3;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .pet-card-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      border-top: 1px dashed rgba(255, 255, 255, 0.08);
+      padding-top: 8px;
+    }
+
+    .channel-tag {
+      color: var(--accent-neon);
+      font-weight: 500;
+    }
+
+    /* Estilos Centro de Ayuda (Captura 1) */
+    .help-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .help-pill-green {
+      display: inline-block;
+      background-color: rgba(16, 185, 129, 0.15);
+      color: #6ee7b7;
+      font-size: 0.7rem;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .help-pill-blue {
+      display: inline-block;
+      background-color: rgba(56, 189, 248, 0.15);
+      color: var(--accent-neon);
+      font-size: 0.7rem;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .help-list-item {
+      display: flex;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .help-list-item span.check {
+      color: var(--accent-neon);
+      font-weight: bold;
     }
 
     .app-nav {
@@ -380,7 +527,94 @@
         </div>
       </div>
 
-      <!-- VISTA 2: INICIAR SESIÓN / REGISTRO -->
+      <!-- VISTA 2: LISTA DE MASCOTAS (Sincronizada con Captura 2) -->
+      <div id="tab-mascotas" class="tab-content">
+        <input type="text" class="input-field" placeholder="Buscar por nombre, raza o tutor..." oninput="filtrarMascotas(this.value)">
+
+        <div class="filter-tabs">
+          <div class="filter-chip active" onclick="filtrarEstado('todas', this)">Todas (3)</div>
+          <div class="filter-chip" onclick="filtrarEstado('perdida', this)">Perdidas (2)</div>
+          <div class="filter-chip" onclick="filtrarEstado('casa', this)">En casa (1)</div>
+        </div>
+
+        <div id="pets-list" style="display:flex; flex-direction:column; gap:12px;">
+          
+          <!-- Félix -->
+          <div class="pet-card-list" data-status="perdida" onclick="cargarMascotaPorId('PET001')">
+            <div class="pet-card-top">
+              <div class="pet-type-avatar">
+                <span>🐱</span>
+                <span class="pet-type-label">Gato</span>
+              </div>
+              <div class="pet-card-info">
+                <div class="pet-card-title-row">
+                  <strong style="font-size:1.05rem;">Félix</strong>
+                  <span class="status-badge-lost">Perdida</span>
+                </div>
+                <div style="font-size:0.75rem; color:var(--text-sub);">Gato Americano Negro · Macho</div>
+              </div>
+            </div>
+            <div class="pet-medical-note">
+              Usa medicamento para las vías urinarias. Es muy miedoso y se asusta mucho con el ruido.
+            </div>
+            <div class="pet-card-bottom">
+              <span style="color:var(--text-sub);">Tutor: <strong style="color:#fff;">María Rosario Ortiz Calsatasig</strong></span>
+              <span class="channel-tag">Solo mensaje (más privado)</span>
+            </div>
+          </div>
+
+          <!-- Rocky -->
+          <div class="pet-card-list" data-status="perdida">
+            <div class="pet-card-top">
+              <div class="pet-type-avatar">
+                <span>🐶</span>
+                <span class="pet-type-label">Perro</span>
+              </div>
+              <div class="pet-card-info">
+                <div class="pet-card-title-row">
+                  <strong style="font-size:1.05rem;">Rocky</strong>
+                  <span class="status-badge-lost">Perdida</span>
+                </div>
+                <div style="font-size:0.75rem; color:var(--text-sub);">Schnauzer Miniatura · Macho</div>
+              </div>
+            </div>
+            <div class="pet-medical-note">
+              Alergia al pollo. Lleva collar antirrábico azul.
+            </div>
+            <div class="pet-card-bottom">
+              <span style="color:var(--text-sub);">Tutor: <strong style="color:#fff;">Carlos David Mendoza</strong></span>
+              <span class="channel-tag">Llamada o WhatsApp</span>
+            </div>
+          </div>
+
+          <!-- Luna -->
+          <div class="pet-card-list" data-status="casa">
+            <div class="pet-card-top">
+              <div class="pet-type-avatar">
+                <span>🐕</span>
+                <span class="pet-type-label">Perro</span>
+              </div>
+              <div class="pet-card-info">
+                <div class="pet-card-title-row">
+                  <strong style="font-size:1.05rem;">Luna</strong>
+                  <span class="status-badge-home">Con tutor</span>
+                </div>
+                <div style="font-size:0.75rem; color:var(--text-sub);">Golden Retriever · Hembra</div>
+              </div>
+            </div>
+            <div class="pet-medical-note">
+              Esterilizada. Muy dócil con niños. Sin alergias.
+            </div>
+            <div class="pet-card-bottom">
+              <span style="color:var(--text-sub);">Tutor: <strong style="color:#fff;">Valeria Gómez</strong></span>
+              <span class="channel-tag">Llamada o WhatsApp</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- VISTA 3: INICIAR SESIÓN / REGISTRO -->
       <div id="tab-login" class="tab-content">
         <div class="card">
           <h2 style="font-size:1.3rem; margin-bottom:6px;">Iniciar Sesión</h2>
@@ -393,10 +627,10 @@
           <div style="text-align:center; color:var(--text-sub); font-size:0.75rem; margin:14px 0;">— o con tu correo —</div>
 
           <label style="font-size:0.8rem; color:var(--text-sub);">Correo electrónico</label>
-          <input type="email" class="input-field" placeholder="ejemplo@correo.com">
+          <input type="email" class="input-field" placeholder="ejemplo@correo.com" style="margin-top:4px;">
 
           <label style="font-size:0.8rem; color:var(--text-sub); margin-top:10px; display:block;">Contraseña</label>
-          <input type="password" class="input-field" placeholder="••••••••">
+          <input type="password" class="input-field" placeholder="••••••••" style="margin-top:4px;">
 
           <button class="btn-action btn-message" style="margin-top:16px;" onclick="alert('Iniciando sesión...')">
             Ingresar
@@ -411,26 +645,39 @@
         </div>
       </div>
 
-      <!-- VISTA 3: MASCOTAS -->
-      <div id="tab-mascotas" class="tab-content">
-        <input type="text" class="input-field" placeholder="Buscar por nombre, raza o tutor..." style="margin-bottom:10px;">
+      <!-- VISTA 4: CENTRO DE AYUDA (Sincronizada con Captura 1) -->
+      <div id="tab-ayuda" class="tab-content">
+        <div class="help-header-row">
+          <h2 style="font-size:1.3rem; font-weight:800;">Centro de Ayuda</h2>
+          <span style="font-size:0.75rem; color:var(--text-sub); cursor:pointer;" onclick="cambiarTab('inicio')">Volver a inicio</span>
+        </div>
+
         <div class="card">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div>
-              <strong>Félix</strong>
-              <div style="font-size:0.75rem; color:var(--text-sub);">Gato Americano Negro</div>
-            </div>
-            <span style="background:rgba(239,68,68,0.2); color:#fca5a5; font-size:0.7rem; padding:2px 8px; border-radius:10px;">Perdida</span>
+          <div style="font-weight:700; font-size:1rem; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+            🔒 Privacidad y Datos Protegidos
+          </div>
+          <span class="help-pill-green">Teléfonos no expuestos públicamente</span>
+          <p style="font-size:0.82rem; color:var(--text-sub); line-height:1.4; margin-bottom:14px;">
+            PetSafe QR oculta los datos personales del tutor. Cuando encuentras una mascota y presionas 'Contactar', el sistema utiliza un canal intermedio (formulario seguro o puente verificado) sin revelar el número privado ni dirección del dueño en la placa pública.
+          </p>
+
+          <div class="help-list-item">
+            <span class="check">✓</span>
+            <div><strong>Sin rastreo invasivo:</strong> Ninguna persona ajena puede ver tu número o tu ubicación sin tu autorización explícita.</div>
+          </div>
+          <div class="help-list-item">
+            <span class="check">✓</span>
+            <div><strong>Preferencia del tutor:</strong> El tutor define si acepta llamada, WhatsApp o solo mensaje de texto seguro.</div>
           </div>
         </div>
-      </div>
 
-      <!-- VISTA 4: AYUDA -->
-      <div id="tab-ayuda" class="tab-content">
         <div class="card">
-          <h3 style="color:var(--accent-neon); margin-bottom:8px;">🔒 Privacidad PetSafe QR</h3>
+          <div style="font-weight:700; font-size:1rem; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+            📍 ¿Cómo funciona la ubicación GPS?
+          </div>
+          <span class="help-pill-blue">Solo con permiso del explorador</span>
           <p style="font-size:0.82rem; color:var(--text-sub); line-height:1.4;">
-            Los datos personales del tutor están protegidos. El sistema establece comunicación segura sin exponer números privados en la placa física.
+            Al escanear una placa o reportar un hallazgo, el navegador pedirá tu permiso. Solamente si lo permites, se genera una coordenada exacta al tutor por correo o WhatsApp para facilitar el rescate.
           </p>
         </div>
       </div>
@@ -470,7 +717,17 @@
       document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
 
       document.getElementById(`tab-${tabId}`).classList.add('active');
-      if (el) el.classList.add('active');
+      
+      if (el) {
+        el.classList.add('active');
+      } else {
+        // Asignar active al botón nav correspondiente si se llama desde JS interno
+        const navBtns = document.querySelectorAll('.nav-btn');
+        if (tabId === 'inicio') navBtns[0].classList.add('active');
+        if (tabId === 'mascotas') navBtns[1].classList.add('active');
+        if (tabId === 'login') navBtns[2].classList.add('active');
+        if (tabId === 'ayuda') navBtns[3].classList.add('active');
+      }
     }
 
     async function cargarMascota() {
@@ -551,6 +808,10 @@
       }
     }
 
+    function cargarMascotaPorId(id) {
+      window.location.search = `?id=${id}`;
+    }
+
     function enviarUbicacionGPS() {
       if (!navigator.geolocation) {
         alert("Tu navegador no soporta geolocalización.");
@@ -574,6 +835,27 @@
           alert("No se pudo obtener la ubicación. Por favor concede permisos GPS a tu navegador.");
         }
       );
+    }
+
+    function filtrarMascotas(query) {
+      const q = query.toLowerCase();
+      document.querySelectorAll('.pet-card-list').forEach(card => {
+        const texto = card.innerText.toLowerCase();
+        card.style.display = texto.includes(q) ? 'flex' : 'none';
+      });
+    }
+
+    function filtrarEstado(estado, el) {
+      document.querySelectorAll('.filter-chip').forEach(chip => chip.classList.remove('active'));
+      el.classList.add('active');
+
+      document.querySelectorAll('.pet-card-list').forEach(card => {
+        if (estado === 'todas') {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = card.getAttribute('data-status') === estado ? 'flex' : 'none';
+        }
+      });
     }
 
     cargarMascota();
