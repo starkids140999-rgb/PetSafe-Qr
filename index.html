@@ -16,8 +16,10 @@
       --text-sub: #94a3b8;
       --warning-bg: rgba(245, 158, 11, 0.1);
       --warning-border: #f59e0b;
-      --status-lost: #ef4444;
-      --status-home: #10b981;
+      --status-lost-bg: rgba(239, 68, 68, 0.15);
+      --status-lost-text: #fca5a5;
+      --status-home-bg: rgba(16, 185, 129, 0.15);
+      --status-home-text: #6ee7b7;
     }
 
     * {
@@ -149,7 +151,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .pet-name-title {
@@ -168,6 +170,30 @@
       font-size: 0.8rem;
       font-weight: 600;
       border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+
+    /* Insignias de Estado */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .status-badge.perdido {
+      background-color: var(--status-lost-bg);
+      color: var(--status-lost-text);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .status-badge.casa {
+      background-color: var(--status-home-bg);
+      color: var(--status-home-text);
+      border: 1px solid rgba(16, 185, 129, 0.3);
     }
 
     .alert-box {
@@ -210,7 +236,7 @@
       color: #f1f5f9;
     }
 
-    /* Estilos para el contacto de emergencia oculto */
+    /* Módulo Apoyo de Emergencia Oculto */
     .emergency-box {
       background-color: var(--inner-card);
       border: 1px dashed rgba(245, 158, 11, 0.4);
@@ -228,7 +254,7 @@
       font-size: 0.75rem;
       font-weight: 600;
       cursor: pointer;
-      margin-top: 6px;
+      margin-top: 8px;
       width: 100%;
       display: flex;
       align-items: center;
@@ -575,7 +601,7 @@
               <div class="pet-card-info">
                 <div class="pet-card-title-row">
                   <strong style="font-size:1.05rem;">Félix</strong>
-                  <span class="status-badge-lost">Perdida</span>
+                  <span class="status-badge-lost">Perdido</span>
                 </div>
                 <div style="font-size:0.75rem; color:var(--text-sub);">Gato Americano Negro · Macho</div>
               </div>
@@ -584,7 +610,7 @@
               Usa medicamento para las vías urinarias. Es muy miedoso y se asusta mucho con el ruido.
             </div>
             <div class="pet-card-bottom">
-              <span style="color:var(--text-sub);">Tutor: <strong style="color:#fff;">María Rosario Ortiz Calsatasig</strong></span>
+              <span style="color:var(--text-sub);">Tutor: <strong style="color:#fff;">María Rosario Ortiz Caisatasig</strong></span>
               <span class="channel-tag">Solo mensaje (más privado)</span>
             </div>
           </div>
@@ -599,7 +625,7 @@
               <div class="pet-card-info">
                 <div class="pet-card-title-row">
                   <strong style="font-size:1.05rem;">Rocky</strong>
-                  <span class="status-badge-lost">Perdida</span>
+                  <span class="status-badge-lost">Perdido</span>
                 </div>
                 <div style="font-size:0.75rem; color:var(--text-sub);">Schnauzer Miniatura · Macho</div>
               </div>
@@ -737,7 +763,8 @@
     const API_URL = "https://script.google.com/macros/s/AKfycbxxvZVQ547PYNuUyjjz3DBsjzaWaH8vy8PQEh59rLrkIVQx1YzWV-z1zSCuEOsKC6Q/exec";
     let telefonoTutor = "";
     let nombreMascota = "";
-    let contactoEmergencia = "";
+    let nombreEmergencia = "";
+    let telefonoEmergenciaReal = "";
 
     function cambiarTab(tabId, el) {
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
@@ -756,6 +783,26 @@
       }
     }
 
+    function parsearContactoEmergencia(cadenaRaw) {
+      if (!cadenaRaw) return { nombre: "Contacto de Apoyo", numero: "" };
+      
+      // Separa el texto si viene en formato "Nombre : 099999999" o similar
+      const partes = cadenaRaw.split(':');
+      if (partes.length >= 2) {
+        const nombre = partes[0].trim();
+        const numero = partes.slice(1).join(':').replace(/[^0-9]/g, '');
+        return { nombre, numero };
+      }
+      
+      // Si sólo viene un número
+      const soloNumeros = cadenaRaw.replace(/[^0-9]/g, '');
+      if (soloNumeros.length > 6) {
+        return { nombre: "Contacto de Apoyo", numero: soloNumeros };
+      }
+
+      return { nombre: cadenaRaw.trim(), numero: "" };
+    }
+
     async function cargarMascota() {
       const container = document.getElementById('pet-data-container');
       const urlParams = new URLSearchParams(window.location.search);
@@ -772,7 +819,16 @@
 
         telefonoTutor = data.telefono ? data.telefono.toString().replace(/[^0-9]/g, '') : "";
         nombreMascota = data.nombre || "la mascota";
-        contactoEmergencia = data.emergencia || "Lizbeth Ortiz";
+
+        // Procesa el contacto de emergencia para separar el nombre del número
+        const parsedEmergencia = parsearContactoEmergencia(data.emergencia);
+        nombreEmergencia = parsedEmergencia.nombre;
+        telefonoEmergenciaReal = parsedEmergencia.numero;
+
+        // Determinar el Estado (Perdido / Con tutor)
+        const estadoTexto = (data.estado && data.estado.toLowerCase().includes('casa')) ? "Con tutor" : "Perdido";
+        const estadoClase = estadoTexto === "Con tutor" ? "casa" : "perdido";
+        const estadoEmoji = estadoTexto === "Con tutor" ? "🏠" : "🚨";
 
         container.innerHTML = `
           ${data.foto ? `
@@ -784,6 +840,10 @@
           <div class="pet-name-header">
             <span class="pet-name-title">${data.nombre}</span>
             <span class="pet-badge-type">🐾 ${data.especie}</span>
+          </div>
+
+          <div class="status-badge ${estadoClase}">
+            ${estadoEmoji} Estado: ${estadoTexto}
           </div>
 
           ${data.cuidados ? `
@@ -802,7 +862,7 @@
           <div class="emergency-box">
             <div class="info-label" style="color:#f59e0b; font-weight:700;">🆘 Apoyo de emergencia</div>
             <div class="info-value" style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
-              <span>${contactoEmergencia}</span>
+              <span>${nombreEmergencia}</span>
               <span id="emergency-phone-display" style="font-size:0.85rem; color:var(--text-sub); letter-spacing:1px;">••••••••</span>
             </div>
 
@@ -847,15 +907,14 @@
       const display = document.getElementById('emergency-phone-display');
       const container = document.getElementById('emergency-action-container');
 
-      // Número de apoyo formateado o demo
-      const numEmergencia = "+593 99 876 5432";
-      display.innerText = numEmergencia;
+      const numMostrar = telefonoEmergenciaReal || "0991239801";
+      display.innerText = numMostrar;
       display.style.color = "#38bdf8";
       display.style.fontWeight = "700";
 
       container.innerHTML = `
-        <a href="tel:${numEmergencia.replace(/[^0-9]/g, '')}" class="btn-action btn-call" style="margin-top:8px; background:#b45309; border:none;">
-          📞 Llamar a ${contactoEmergencia} ahora
+        <a href="tel:${numMostrar}" class="btn-action btn-call" style="margin-top:8px; background:#b45309; border:none;">
+          📞 Llamar a ${nombreEmergencia} ahora
         </a>
       `;
     }
